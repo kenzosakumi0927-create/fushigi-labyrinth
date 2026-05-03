@@ -1,0 +1,156 @@
+/* ふしぎ迷宮アドベンチャー - スタイル */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  /* iOS Safari ダブルタップズーム防止 */
+  touch-action: manipulation;
+}
+
+body {
+  background-color: #0f0f23;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100dvh; /* iOS Safari用の動的ビューポート */
+  font-family: 'DotGothic16', 'Press Start 2P', monospace;
+}
+
+#game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 520px;
+  padding: 8px;
+}
+
+#game-canvas {
+  background-color: #1a1a2e;
+  border: 3px solid #00d9ff;
+  border-radius: 4px;
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  /* タッチ操作中のスクロール・ズーム防止 */
+  touch-action: none;
+}
+
+/* タッチコントロール（スマホ・タブレット用） */
+#touch-controls {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.touch-row {
+  display: flex;
+  gap: 4px;
+}
+
+.touch-actions {
+  margin-top: 8px;
+}
+
+.touch-btn {
+  width: 56px;
+  height: 56px;
+  background: rgba(0, 217, 255, 0.2);
+  border: 2px solid #00d9ff;
+  border-radius: 8px;
+  color: #00d9ff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+}
+
+.touch-btn:active {
+  background: rgba(0, 217, 255, 0.5);
+}
+
+.touch-btn-small {
+  width: 48px;
+  height: 40px;
+  font-size: 12px;
+  font-family: 'Press Start 2P', monospace;
+}
+
+/* タッチデバイスでコントローラーを表示 */
+@media (pointer: coarse) {
+  #touch-controls {
+    display: flex;
+  }
+}
+
+/* 縦向き案内（縦でスマホの場合のみ表示） */
+#rotate-notice {
+  display: none;
+  position: fixed;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+@media (pointer: coarse) and (orientation: portrait) and (max-width: 600px) {
+  #rotate-notice {
+    display: block;
+  }
+}
+
+/* 横向きスマホ：コントロールを横並びに */
+@media (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
+  #game-container {
+    flex-direction: row;
+    max-width: 100%;
+    padding: 4px;
+    gap: 12px;
+  }
+
+  #game-canvas {
+    max-width: none;
+    max-height: 90vh;
+    max-height: 90dvh;
+    width: auto;
+    height: 90vh;
+    height: 90dvh;
+  }
+
+  #touch-controls {
+    gap: 2px;
+  }
+
+  .touch-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+  }
+}
+
+/* PC幅が十分にある場合 */
+@media (min-width: 520px) and (pointer: fine) {
+  #game-canvas {
+    width: 480px;
+  }
+}

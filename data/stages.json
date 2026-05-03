@@ -1,0 +1,136 @@
+{
+  "stages": [
+    {
+      "id": 1,
+      "name": "森の入り口",
+      "timeLimit": 60,
+      "layout": [
+        "WWWWWWWWWWWWWWWWWWWW",
+        "WP...W.....S.....SW",
+        "W.WW.W.WWW.WWWWW..W",
+        "W.W..W.W.........WW",
+        "W.W.WW.W.WWWWWWW..W",
+        "W...W....W.......WW",
+        "WWW.W.WWWW.WWWWW..W",
+        "W...W..........W..W",
+        "W.WWWWWWW.WWWW.W.WW",
+        "W.W.......W..W...WW",
+        "W.W.WWWWWWW..WWWW.W",
+        "W.W.....S.W......SW",
+        "W.WWWWWW..WWWWWWW.W",
+        "W................GW",
+        "WWWWWWWWWWWWWWWWWWWW"
+      ],
+      "enemies": []
+    },
+    {
+      "id": 2,
+      "name": "古代遺跡",
+      "timeLimit": 90,
+      "layout": [
+        "WWWWWWWWWWWWWWWWWWWW",
+        "WP....W...W......SW",
+        "W.WWW.W.W.W.WWWWW.W",
+        "W.W...W.W.W.W.....W",
+        "W.W.WWW.W...W.WWWWW",
+        "W.W.....WWWWW.W...W",
+        "W.WWWWW.......W.W.W",
+        "W.....W.WWWWWWW.W.W",
+        "WWWWW.W.W.......W.W",
+        "WS..W.W.W.WWWWWWW.W",
+        "W.W.W...W.....S...W",
+        "W.W.WWWWWWWWW.WWW.W",
+        "W.W...........W...W",
+        "W.WWWWWWWWWWWWW.WGW",
+        "WWWWWWWWWWWWWWWWWWWW"
+      ],
+      "enemies": [
+        { "type": "patrol", "x": 200, "y": 156, "range": 72 },
+        { "type": "patrol", "x": 350, "y": 252, "range": 60 }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "氷の洞窟",
+      "timeLimit": 120,
+      "layout": [
+        "WWWWWWWWWWWWWWWWWWWW",
+        "WP....W........S.WW",
+        "W.WWW.W.WWWWWWWW..W",
+        "W...W.W.W......WW.W",
+        "WWW.W...W.WWWW..W.W",
+        "W...WWWWW.W..WW.W.W",
+        "W.WWW.....W.K.W.W.W",
+        "W.....WWWWWWW.W...W",
+        "WWWWW.W.......WWWWW",
+        "WS..W.W.WWWWW.....W",
+        "W.W.W.W.W...WWWWW.W",
+        "W.W...W.W.D.W...W.W",
+        "W.WWWWW.W.WWW.W.W.W",
+        "W.......W......WS.GW",
+        "WWWWWWWWWWWWWWWWWWWW"
+      ],
+      "enemies": [
+        { "type": "patrol", "x": 108, "y": 204, "range": 60 },
+        { "type": "chase", "x": 350, "y": 108, "range": 0 }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "火山",
+      "timeLimit": 120,
+      "layout": [
+        "WWWWWWWWWWWWWWWWWWWW",
+        "WP..W......W.....SW",
+        "W.W.W.WWWW.W.WWW..W",
+        "W.W...W..W.W.W..WWW",
+        "W.WWWWW..W...W....W",
+        "W.....W..WWWWWWWW.W",
+        "WWWWW.W..........SW",
+        "W...W.WWWWWWWWWWW.W",
+        "W.W.W.............W",
+        "W.W.WWWWWWWWW.WWWWW",
+        "W.W.........W.....W",
+        "W.WWWWWWWWW.WWWWW.W",
+        "WS..........W...W.W",
+        "WWWWWWWWWWWWW.W.WGW",
+        "WWWWWWWWWWWWWWWWWWWW"
+      ],
+      "enemies": [
+        { "type": "patrol", "x": 200, "y": 108, "range": 80 },
+        { "type": "patrol", "x": 300, "y": 204, "range": 60 },
+        { "type": "chase", "x": 100, "y": 300, "range": 0 },
+        { "type": "chase", "x": 380, "y": 60, "range": 0 }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "闇の城",
+      "timeLimit": 150,
+      "layout": [
+        "WWWWWWWWWWWWWWWWWWWW",
+        "WP..W.S....W.....SW",
+        "W.W.W.WWWW.WWWWW..W",
+        "W.W.W....W.....WW.W",
+        "W.W.WWWW.WWWWW..W.W",
+        "W.W......W...WW.W.W",
+        "W.WWWWWWWW.K..W.W.W",
+        "W..........WWWW...W",
+        "WWWWWWWWWW.....WWWW",
+        "WS.....W...WWW....W",
+        "W.WWWW.W.W.W..WW.WW",
+        "W....W.W.W.D.WW...W",
+        "WWWW.W.W.W.WWW.WW.W",
+        "W......W.W.S...W.GW",
+        "WWWWWWWWWWWWWWWWWWWW"
+      ],
+      "enemies": [
+        { "type": "patrol", "x": 156, "y": 60, "range": 48 },
+        { "type": "patrol", "x": 350, "y": 204, "range": 72 },
+        { "type": "chase", "x": 100, "y": 252, "range": 0 },
+        { "type": "chase", "x": 300, "y": 300, "range": 0 },
+        { "type": "chase", "x": 400, "y": 108, "range": 0 }
+      ]
+    }
+  ]
+}
