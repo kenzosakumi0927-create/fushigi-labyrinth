@@ -28,12 +28,34 @@ const Game = {
   stagesData: null,
   saveData: null,
 
+  // Canvas上のマウス/タッチ座標（ホバー用）
+  hoverPos: null,
+
   // 初期化
   async init() {
     this.canvas = document.getElementById('game-canvas');
     this.ctx = this.canvas.getContext('2d');
     Input.init();
     this.saveData = Storage.load();
+
+    // Canvas上のクリック/タップイベント
+    this.canvas.addEventListener('click', (e) => this._onCanvasClick(e));
+    this.canvas.addEventListener('touchend', (e) => {
+      // タッチ操作でもクリックとして処理
+      const touch = e.changedTouches[0];
+      if (touch) {
+        this._onCanvasTap(touch);
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // ホバー追跡（PC用）
+    this.canvas.addEventListener('mousemove', (e) => {
+      this.hoverPos = this._getCanvasPos(e);
+    });
+    this.canvas.addEventListener('mouseleave', () => {
+      this.hoverPos = null;
+    });
 
     // ステージデータ読み込み
     try {
@@ -50,6 +72,80 @@ const Game = {
     // ゲームループ開始
     this.lastTime = performance.now();
     this._loop();
+  },
+
+  // Canvas上の座標を取得（CSSリサイズ対応）
+  _getCanvasPos(e) {
+    const rect = this.canvas.getBoundingClientRect();
+    const scaleX = 480 / rect.width;
+    const scaleY = 360 / rect.height;
+    return {
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY
+    };
+  },
+
+  // マウスクリック処理
+  _onCanvasClick(e) {
+    const pos = this._getCanvasPos(e);
+    this._handleTapAt(pos.x, pos.y);
+  },
+
+  // タッチ処理
+  _onCanvasTap(touch) {
+    const rect = this.canvas.getBoundingClientRect();
+    const scaleX = 480 / rect.width;
+    const scaleY = 360 / rect.height;
+    const x = (touch.clientX - rect.left) * scaleX;
+    const y = (touch.clientY - rect.top) * scaleY;
+    this._handleTapAt(x, y);
+  },
+
+  // タップ/クリック座標に応じた処理
+  _handleTapAt(x, y) {
+    switch (this.state) {
+      case 'title':
+        // 「スタート」ボタン領域（y=185〜210, 中央付近）
+        if (y >= 185 && y <= 215 && x >= 120 && x <= 360) {
+          this.state = 'select';
+        }
+        break;
+
+      case 'select':
+        // 各ステージ行の判定（y = 80 + i*50 を中心に上下20px）
+        for (let i = 0; i < 5; i++) {
+          const rowY = 80 + i * 50;
+          if (y >= rowY - 20 && y <= rowY + 10 && x >= 60 && x <= 420) {
+            const stageId = i + 1;
+            if (this.saveData.unlockedStages.includes(stageId)) {
+              this._startStage(stageId);
+            }
+            break;
+          }
+        }
+        break;
+
+      case 'clear':
+        // 画面タップで次のステージ or セレクトへ
+        if (y >= 280) {
+          // 下部タップ → セレクトへ
+          this.state = 'select';
+        } else {
+          // 上部タップ → 次のステージ
+          const nextId = this.currentStageId + 1;
+          if (nextId <= 5 && this.saveData.unlockedStages.includes(nextId)) {
+            this._startStage(nextId);
+          } else {
+            this.state = 'select';
+          }
+        }
+        break;
+
+      case 'gameover':
+        // 画面タップでリトライ
+        this._startStage(this.currentStageId);
+        break;
+    }
   },
 
   // メインループ
@@ -92,6 +188,9 @@ const Game = {
     // 画面クリア
     ctx.fillStyle = '#1a1a2e';
     ctx.fillRect(0, 0, 480, 360);
+
+    // カーソルスタイル更新
+    this._updateCursor();
 
     switch (this.state) {
       case 'title':
@@ -243,6 +342,40 @@ const Game = {
       Input.keys['Escape'] = false;
       this.state = 'select';
     }
+  },
+
+  // カーソルスタイル更新
+  _updateCursor() {
+    if (!this.hoverPos) {
+      this.canvas.style.cursor = 'default';
+      return;
+    }
+    const { x, y } = this.hoverPos;
+
+    if (this.state === 'title') {
+      // スタートボタン領域
+      if (y >= 185 && y <= 215 && x >= 120 && x <= 360) {
+        this.canvas.style.cursor = 'pointer';
+        return;
+      }
+    } else if (this.state === 'select') {
+      for (let i = 0; i < 5; i++) {
+        const rowY = 80 + i * 50;
+        if (y >= rowY - 20 && y <= rowY + 10 && x >= 60 && x <= 420) {
+          if (this.saveData.unlockedStages.includes(i + 1)) {
+            this.canvas.style.cursor = 'pointer';
+          } else {
+            this.canvas.style.cursor = 'not-allowed';
+          }
+          return;
+        }
+      }
+    } else if (this.state === 'clear' || this.state === 'gameover') {
+      this.canvas.style.cursor = 'pointer';
+      return;
+    }
+
+    this.canvas.style.cursor = 'default';
   },
 
   // --- ゲーム制御 ---

@@ -53,10 +53,20 @@ const UI = {
     ctx.fillText('アドベンチャー', 240, 130);
     ctx.shadowBlur = 0;
 
-    // メニュー
+    // 「スタート」ボタン（ホバーで光る）
     ctx.font = '11px "Press Start 2P", monospace';
-    ctx.fillStyle = '#fff';
+    const hover = Game.hoverPos;
+    const startHover = hover && hover.y >= 185 && hover.y <= 215 && hover.x >= 120 && hover.x <= 360;
+    if (startHover) {
+      ctx.fillStyle = '#00d9ff';
+      ctx.shadowColor = '#00d9ff';
+      ctx.shadowBlur = 8;
+    } else {
+      ctx.fillStyle = '#fff';
+    }
     ctx.fillText('▶ スタート', 240, 200);
+    ctx.shadowBlur = 0;
+
     ctx.fillStyle = '#aaa';
     ctx.fillText('記録を見る', 240, 240);
     ctx.fillText('あそびかた', 240, 270);
@@ -64,7 +74,7 @@ const UI = {
     // 操作案内
     ctx.font = '9px "DotGothic16", monospace';
     ctx.fillStyle = '#666';
-    ctx.fillText('矢印キー or タッチで操作', 240, 330);
+    ctx.fillText('タップ or Enter でスタート', 240, 330);
 
     ctx.restore();
   },
@@ -83,29 +93,56 @@ const UI = {
 
     ctx.font = '10px "Press Start 2P", monospace';
     const stageNames = ['森の入り口', '古代遺跡', '氷の洞窟', '火山', '闇の城'];
+    const hover = Game.hoverPos;
 
     for (let i = 0; i < 5; i++) {
       const y = 80 + i * 50;
       const unlocked = unlockedStages.includes(i + 1);
+      const isHover = hover && hover.y >= y - 20 && hover.y <= y + 10 && hover.x >= 60 && hover.x <= 420;
 
       if (unlocked) {
-        ctx.fillStyle = '#fff';
+        // ホバー時：シアンに光る
+        if (isHover) {
+          ctx.fillStyle = '#00d9ff';
+          ctx.shadowColor = '#00d9ff';
+          ctx.shadowBlur = 10;
+          // 背景ハイライト
+          ctx.fillRect(60, y - 18, 360, 28);
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = '#1a1a2e';
+        } else {
+          ctx.fillStyle = '#fff';
+        }
         ctx.fillText(`${i + 1}. ${stageNames[i]}`, 200, y);
+
         // ベストランク表示
         const rank = bestRanks[i + 1];
         if (rank) {
-          ctx.fillStyle = rank === 'S' ? '#ffd700' : rank === 'A' ? '#00d9ff' : '#aaa';
+          if (!isHover) {
+            ctx.fillStyle = rank === 'S' ? '#ffd700' : rank === 'A' ? '#00d9ff' : '#aaa';
+          }
           ctx.fillText(rank, 380, y);
         }
       } else {
-        ctx.fillStyle = '#444';
+        // 未解放ステージ（ホバーしても選べない表示）
+        if (isHover) {
+          ctx.fillStyle = '#555';
+        } else {
+          ctx.fillStyle = '#444';
+        }
         ctx.fillText(`${i + 1}. ？？？`, 200, y);
+        if (isHover) {
+          ctx.font = '8px "DotGothic16", monospace';
+          ctx.fillStyle = '#666';
+          ctx.fillText('🔒 前のステージをクリアすると解放', 240, y + 18);
+          ctx.font = '10px "Press Start 2P", monospace';
+        }
       }
     }
 
     ctx.font = '9px "DotGothic16", monospace';
     ctx.fillStyle = '#666';
-    ctx.fillText('数字キー(1-5)でステージ選択 / ESCで戻る', 240, 340);
+    ctx.fillText('ステージをタップして選択 / 数字キー(1-5)も使えます', 240, 340);
 
     ctx.restore();
   },
@@ -150,7 +187,7 @@ const UI = {
     // 操作案内
     ctx.font = '9px "DotGothic16", monospace';
     ctx.fillStyle = '#aaa';
-    ctx.fillText('ENTER: 次のステージ / R: リトライ / ESC: セレクト', 240, 320);
+    ctx.fillText('タップで次へ / R: リトライ / ESC: セレクト', 240, 320);
 
     ctx.restore();
   },
@@ -169,7 +206,7 @@ const UI = {
 
     ctx.font = '9px "DotGothic16", monospace';
     ctx.fillStyle = '#aaa';
-    ctx.fillText('R: リトライ / ESC: ステージセレクト', 240, 220);
+    ctx.fillText('タップ or R でリトライ / ESC: セレクト', 240, 220);
 
     ctx.restore();
   },
