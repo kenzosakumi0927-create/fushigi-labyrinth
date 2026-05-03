@@ -1,0 +1,10 @@
+{
+  "name": "fushigi-labyrinth",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ふしぎ迷宮アドベンチャー - 中学生向け迷路パズルゲーム",
+  "scripts": {
+    "validate": "node scripts/validate-stages.js",
+    "generate-stages": "node scripts/generate-stages.js"
+  }
+}
